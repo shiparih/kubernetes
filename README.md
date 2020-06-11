@@ -22,7 +22,8 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s htt
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 
-5. Create S3 bucket in AWS
+5. Create S3 bucket in AWS 
+ 
 S3 bucket is used by kubernetes to persist cluster state, lets create s3 bucket using aws cli Note: Make sure you choose bucket name that is uniqe accross all aws accounts
 
 aws s3 mb s3://shilpijavahome.in.k8s --region us-east-2
@@ -38,17 +39,21 @@ Open .bashrc file
 
 	vi ~/.bashrc
 
+
 export KOPS_CLUSTER_NAME=shilpi.in
 export KOPS_STATE_STORE=s3://shilpijavahome.in.k8s
+
 Then running command to reflect variables added to .bashrc
 
 	source ~/.bashrc
+	
 8. Create ssh key pair
 This keypair is used for ssh into kubernetes cluster
 
 ssh-keygen
 
 9. Create a Kubernetes cluster definition.
+
 kops create cluster \
 --state=${KOPS_STATE_STORE} \
 --node-count=2 \
@@ -62,10 +67,15 @@ kops create cluster \
 10. Create kubernetes cluster
 
 kops update cluster --yes
+
 Above command may take some time to create the required infrastructure resources on AWS. Execute the validate command to check its status and wait until the cluster becomes ready
 
+
 kops validate cluster
+
 For the above above command, you might see validation failed error initially when you create cluster and it is expected behaviour, you have to wait for some more time and check again.
 
+
 11. To connect to the master
+
 ssh admin@api.shilpi.in
